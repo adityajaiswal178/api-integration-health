@@ -1,7 +1,9 @@
 package com.brightline.health.controller;
 
+import com.brightline.health.model.AiIncidentAnalysis;
 import com.brightline.health.model.AiInsight;
 import com.brightline.health.model.HealthReport;
+import com.brightline.health.model.IntegrationHealth;
 import com.brightline.health.service.HealthService;
 import com.brightline.health.service.InsightService;
 import org.springframework.web.bind.annotation.*;
@@ -27,5 +29,14 @@ public class HealthController {
     AiInsight insight(@PathVariable String name, @RequestParam(required = false) Integer windowMinutes) {
         var h = service.evaluate(windowMinutes).integrations().stream().filter(x -> x.integration().equalsIgnoreCase(name)).findFirst().orElseThrow();
         return insights.explain(h);
+    }
+
+    @GetMapping("/{name}/aiInsight")
+    AiIncidentAnalysis aiInsight(@PathVariable String name, @RequestParam(required = false) Integer windowMinutes) {
+        IntegrationHealth h = service.evaluate(windowMinutes)
+                .integrations()
+                .stream().filter(x -> x.integration().equalsIgnoreCase(name)).findFirst()
+                .orElseThrow();
+        return service.getAIGeneratedResponse(h);
     }
 }

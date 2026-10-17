@@ -2,10 +2,7 @@ package com.brightline.health.service;
 
 import com.brightline.health.Repository.JsonLogRepository;
 import com.brightline.health.config.HealthPolicyProperties;
-import com.brightline.health.model.HealthReport;
-import com.brightline.health.model.HealthStatus;
-import com.brightline.health.model.IntegrationHealth;
-import com.brightline.health.model.RequestLog;
+import com.brightline.health.model.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,10 +13,12 @@ import java.util.stream.Collectors;
 public class HealthService {
     private final JsonLogRepository repo;
     private final HealthPolicyProperties p;
+    private final AiIncidentService aiIncidentService;
 
-    HealthService(JsonLogRepository r, HealthPolicyProperties p) {
+    HealthService(JsonLogRepository r, HealthPolicyProperties p, AiIncidentService aiIncidentService) {
         repo = r;
         this.p = p;
+        this.aiIncidentService = aiIncidentService;
     }
 
     public HealthReport evaluate(Integer requestedWindow) {
@@ -113,5 +112,9 @@ public class HealthService {
     public static long percentile95(List<Long> x) {
         if (x.isEmpty()) return 0;
         return x.get(Math.max(0, (int) Math.ceil(.95 * x.size()) - 1));
+    }
+
+    public AiIncidentAnalysis getAIGeneratedResponse(IntegrationHealth integrationHealth) {
+        return aiIncidentService.analyze(integrationHealth);
     }
 }

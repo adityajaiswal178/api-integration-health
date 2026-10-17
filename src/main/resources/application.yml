@@ -11,3 +11,8 @@ health:
     degraded-p95-ms: 1000
     unhealthy-p95-ms: 5000
 management.endpoints.web.exposure.include: health,info
+
+spring:
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
