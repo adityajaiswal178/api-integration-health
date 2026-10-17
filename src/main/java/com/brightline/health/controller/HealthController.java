@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/integrations")
-class HealthController {
+public class HealthController {
 
     private final HealthService service;
     private final InsightService insights;
