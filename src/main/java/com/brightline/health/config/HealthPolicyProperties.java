@@ -1,4 +1,4 @@
-package com.brightline.health;
+package com.brightline.health.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

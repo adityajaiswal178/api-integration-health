@@ -1,5 +1,11 @@
-package com.brightline.health;
+package com.brightline.health.service;
 
+import com.brightline.health.Repository.JsonLogRepository;
+import com.brightline.health.config.HealthPolicyProperties;
+import com.brightline.health.model.HealthReport;
+import com.brightline.health.model.HealthStatus;
+import com.brightline.health.model.IntegrationHealth;
+import com.brightline.health.model.RequestLog;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -7,7 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-class HealthService {
+public class HealthService {
     private final JsonLogRepository repo;
     private final HealthPolicyProperties p;
 
@@ -16,7 +22,7 @@ class HealthService {
         this.p = p;
     }
 
-    HealthReport evaluate(Integer requestedWindow) {
+    public HealthReport evaluate(Integer requestedWindow) {
         var all = repo.findAll();
         var now = all.stream().map(RequestLog::timestamp).max(Comparator.naturalOrder()).orElse(LocalDateTime.now());
         int mins = requestedWindow == null ? p.windowMinutes() : Math.max(1, Math.min(requestedWindow, 1440));
@@ -71,7 +77,7 @@ class HealthService {
         return Math.round(x * 10000.0) / 10000.0;
     }
 
-    static long percentile95(List<Long> x) {
+    public static long percentile95(List<Long> x) {
         if (x.isEmpty()) return 0;
         return x.get(Math.max(0, (int) Math.ceil(.95 * x.size()) - 1));
     }

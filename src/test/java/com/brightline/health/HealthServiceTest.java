@@ -1,5 +1,6 @@
 package com.brightline.health;
 
+import com.brightline.health.service.HealthService;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

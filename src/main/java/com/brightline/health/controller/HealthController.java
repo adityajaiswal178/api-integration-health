@@ -1,10 +1,15 @@
-package com.brightline.health;
+package com.brightline.health.controller;
 
+import com.brightline.health.model.AiInsight;
+import com.brightline.health.model.HealthReport;
+import com.brightline.health.service.HealthService;
+import com.brightline.health.service.InsightService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/integrations")
 class HealthController {
+
     private final HealthService service;
     private final InsightService insights;
 
