@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Brightline Integration Health</title>
+    <style>
+        body{font-family:Arial;margin:30px;background:#f5f7fa;color:#172b4d}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}.card{background:white;padding:18px;border-radius:10px;box-shadow:0 2px 8px #ccd}.HEALTHY{border-left:8px solid #2e7d32}.DEGRADED,.INSUFFICIENT_DATA{border-left:8px solid #f9a825}.UNHEALTHY{border-left:8px solid #c62828}.NO_DATA{border-left:8px solid #607d8b}button{padding:10px 16px}
+    </style>
+</head>
+<body><h1>Brightline API Integration Health</h1>
+<p>Explainable health from the latest 15-minute log window.</p>
+<button onclick="load()">Refresh</button>
+<p id="time"></p>
+<div class="grid" id="grid"></div>
+<script>
+    async function load(){let r=await fetch('/api/v1/integrations/health');let d=await r.json();time.textContent='Generated '+d.generatedAt;grid.innerHTML=d.integrations.map(x=>`<div class="card ${x.status}"><h2>${x.integration}</h2><h3>${x.status}</h3><p>${x.requestCount} requests | ${(x.errorRate*100).toFixed(1)}% failed | ${(x.timeoutRate*100).toFixed(1)}% timed out</p><p>p95 ${x.p95LatencyMs} ms</p><p>${x.reasons.join(', ')}</p></div>`).join('')}load()
+</script>
+</body>
+</html>
